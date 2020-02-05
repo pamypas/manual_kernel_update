@@ -1,7 +1,15 @@
 #!/bin/bash
 
-# clean all
 yum update -y
+
+wget https://download.virtualbox.org/virtualbox/6.1.2/VBoxGuestAdditions_6.1.2.iso -P /root
+mount /root/VBoxGuestAdditions_6.1.2.iso /mnt
+/mnt/VBoxLinuxAdditions.run
+modprobe vboxguest vboxsf
+
+umount /mnt
+
+# clean all
 yum clean all
 
 
@@ -13,6 +21,7 @@ chown -R vagrant:vagrant /home/vagrant/.ssh
 
 
 # Remove temporary files
+rm -rf /root/*
 rm -rf /tmp/*
 rm  -f /var/log/wtmp /var/log/btmp
 rm -rf /var/cache/* /usr/share/doc/*
@@ -27,5 +36,3 @@ rm -rf /run/log/journal/*
 dd if=/dev/zero of=/EMPTY bs=1M
 rm -f /EMPTY
 sync
-grub2-set-default 1
-echo "###   Hi from secone stage" >> /boot/grub2/grub.cfg
